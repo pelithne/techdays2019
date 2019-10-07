@@ -31,6 +31,8 @@ In this step in the tutorial, you will prepare a multi-container application for
 
 Once completed, the following application will run in your local development environment:
 
+DÄÄÄÄÄÄÄÄVVVVÅÅÅÅÅPS
+
 ![Image of Kubernetes cluster on Azure](./media/azure-vote.png) 
 
 
