@@ -344,7 +344,216 @@ To see the application in action, open a web browser to the external IP address.
 
 If the application did not load, it might be due to an authorization problem with your image registry. To view the status of your containers, use the `kubectl get pods` command. If the container images cannot be pulled, see [allow access to Container Registry with a Kubernetes secret](https://docs.microsoft.com/azure/container-registry/container-registry-auth-aks#access-with-kubernetes-secret).
 
-In the next step you will learn how to use Kubernetes scaling features.
+In the next step you will learn how to use Kubernetes DevOps features.
+
+
+## Azure DevOps with AKS
+
+![Image of Azure DevOps](./media/index-hero.jpg)
+
+In this step you will make a CI/CD pipeline for the AKS cluster.  
+
+* Automatically build an application on check-in 
+* Automatically build the docker container for the application
+* Autamtically deploy the docker container in AKS
+
+
+### Register an account at Azure DevOps
+
+You can create a free Azure DevOps account at: <https://azure.microsoft.com/en-us/services/devops/>. Azure DevOps is SaaS service from Microsoft. You need a Microsoft account to get started. If you do not have one you need to create a free one here: <https://account.microsoft.com/account?lang=en-us>
+
+* Give the project name "Techdays 2019"
+
+You should now have project like this:
+
+![Image of Azure DevOps](./media/devopsproject.jpg)
+
+The left hand side shows you:
+
+* **Overview** - overview of the Azure DeOps project like wiki, dashboards and more
+* **Boards** - supporting a Agile workmethology with sprints and backlog
+* **Repos** - your source code
+* **Pipelines** - you build and release - the essance of CI/CD
+* **TestPlans** - you testing overview
+* **Artifacts** - your build artifacts that you might share in other projects, like nuget packages and such.
+
+### Create your Repository
+
+Click on "Repos".
+
+Click "Manage SSH Keys":
+
+![Image Git Credentials](./media/git_ssh.jpg)
+
+Open a bash shell and type:
+
+```console
+>more ~/.ssh/id_rsa.pub
+
+ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDLB1EeE9g1SydPORo3lvC6N+dOJ7vv0kcnPBUfsWWkuop4QjjxY/MP9PaBLYT7f6vS3J5mDOlLw0EzbmUv
+ab5MPNhWEb8EawPP1W/XNAVBjH6l+j+ZYSrXwbIPhG+jrZhTMYX421+p+ADQHpQZ1HesZz
+lO00N3RqhtrSKFKe8MMAFPCS+pCUQcaNHFsnqJ5z1fftFVeIHP0Zl17bjJi/DbwoIjU+1P6fSTz9diIQJc0syk/cwvcUX2hd6g0qsRv8sdNg8NlI3PlhWI+k
+bcctCV7SI83nQLeO0+eh arash.rassoulpour@microsoft.com
+
+>
+```
+Click on "+New Key" and fill in the public RSA key you got from above.
+
+Click on the Initialize button in the Azure Repos:
+
+![Image Git Credentials](./media/git_init.jpg)
+
+Then clone the repository to your computer and go down in the directory of your repository. Create a file and commit and push it to Azure DevOps Repos.
+
+```console
+>git clone git@ssh.dev.azure.com:v3/arratechdays2019/Techdays2019/Test
+
+Cloning into 'Test'...
+Warning: Permanently added the RSA host key for IP address '52.236.147.103' to the list of known hosts.
+warning: You appear to have cloned an empty repository.
+
+>cd Test
+>echo Hello > "hello.txt"
+>git add *
+>git commit -m "hello.txt added"
+>git push
+```
+
+Check inside the Azure DeOps Repo and your hello.txt file should apprear.
+
+
+![Image Git Hello](./media/git_hello.jpg)
+
+Copy all files under: techdays2019\application\\* to the folder of the git repository created.
+
+```console
+>cp -r /mnt/c/Users/arrass/Documents/GitHub/techdays2019/application/* .
+> ls
+README.md  azure-pipelines.yml  azure-vote-all-in-one-redis.yaml  azure-vote-app  azvote-helmchart  hello.txt
+> git add *
+> git commit -m "added application"
+[master 9875fbe] added application
+ 15 files changed, 461 insertions(+)
+ create mode 100755 README.md
+ create mode 100755 azure-pipelines.yml
+ create mode 100755 azure-vote-all-in-one-redis.yaml
+ create mode 100755 azure-vote-app/Dockerfile
+ create mode 100755 azure-vote-app/azure-vote/config_file.cfg
+ create mode 100755 azure-vote-app/azure-vote/main.py
+ create mode 100755 azure-vote-app/azure-vote/static/default.css
+ create mode 100755 azure-vote-app/azure-vote/templates/index.html
+ create mode 100755 azvote-helmchart/.helmignore
+ create mode 100755 azvote-helmchart/Chart.yaml
+ create mode 100755 azvote-helmchart/templates/NOTES.txt
+ create mode 100755 azvote-helmchart/templates/_helpers.tpl
+ create mode 100755 azvote-helmchart/templates/deployments.yaml
+ create mode 100755 azvote-helmchart/templates/services.yaml
+ create mode 100755 azvote-helmchart/values.yaml
+> git push
+Counting objects: 23, done.
+Delta compression using up to 8 threads.
+Compressing objects: 100% (21/21), done.
+Writing objects: 100% (23/23), 5.35 KiB | 456.00 KiB/s, done.
+Total 23 (delta 1), reused 0 (delta 0)
+remote: Analyzing objects... (23/23) (186 ms)
+remote: Storing packfile... done (137 ms)
+remote: Storing index... done (73 ms)
+To ssh.dev.azure.com:v3/arratechdays2019/Techdays2019/Test
+   5ee10b2..9875fbe  master -> master
+>
+```                         
+
+### Connect Azure and Azure DevOps
+
+Make sure you are using the same account in both Azure and Azure DevOps (same email addess).
+
+With the **same account**:
+
+* Login to Azure portal: https://portal.azure.com
+
+* Login to Azure DevOps: https://dev.azure.com/
+
+
+In Azure DevOps, connect you Azure Subscription by the following instruction: <https://docs.microsoft.com/en-us/azure/devops/pipelines/library/connect-to-azure?view=azure-devops#create-an-azure-resource-manager-service-connection-using-automated-security>
+
+
+![Image Git Subscription](./media/subscription.jpg)
+
+
+Click OK and login with your account and the link between Azure and Azure DevOps is created.
+
+Create an service connection with the Azure Container Registry in the same page, this will bind a conneciton from Azure DevOps to your container registry to build and save your images:
+
+![Image Git Subscription](./media/serviceconnection_acr.jpg)
+
+Go to Pipelines and create a new pipeline:
+![Image Git Subscription](./media/new_pipeline.jpg)
+
+Choose "Azure Repos Git" and then select your repository that you have pushed to Azure DevOps Repo. 
+
+It will automatically select the **azure-pipelines.yml** file that is part of the repository. It contains a Yaml file with the configuration of a build.
+
+![Image Git Subscription](./media/pipeline_1.jpg)
+
+Run the pipeline and see the steps in the build, it will fail since we are not done with the configuration.
+
+### Build your Pipeline
+
+To make a build we need to follow the same steps you have done manually:
+
+1. Go to your new Pipeline called "Test"
+2. Now edit the pipeline and type "docker" in the search bar. Fill in the details and press ok.
+
+![Image Git Subscription](./media/docker_pipeline.jpg)
+
+![Image Git Subscription](./media/docker_pipeline2.jpg)
+
+![Image Git Subscription](./media/docker_pipeline3.jpg)
+
+![Image Git Subscription](./media/docker_pipeline4.jpg)
+
+
+The build definition that is both building and pushing to the Azure Container Registry:
+
+```console
+
+trigger:
+- master
+
+pool:
+  vmImage: 'Ubuntu-16.04'
+
+steps:
+- task: Docker@2
+  inputs:
+    containerRegistry: 'Azure Container Registry'
+    repository: techdays2019/azure-vote-front
+    command: 'buildAndPush'
+    Dockerfile: '**/Dockerfile'
+    tags: $(Build.BuildId)
+
+```
+Watch the repository in the Azure Container Registry.
+
+![Image Git Subscription](./media/acr.jpg)
+
+The azure-vote-front is the service you just built.
+
+Now we are going to deploy the image into the AKS cluster.
+
+Go to the yaml file that contains the definition of your service: **azure-vote-all-in-one-redis.yaml**
+
+Change:
+
+```
+    image: microsoft/azure-vote-front:v1
+    
+    ->>
+    image: **<NAME OF YOUR AZURE CONTAINER REGISTRY>**.azurecr.io/techdays2019/azure-vote-front:**<BUILD ID>**
+    
+```
+
+
 
 
 ## Scale applications in Azure Kubernetes Service (AKS)
