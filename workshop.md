@@ -484,16 +484,16 @@ Click OK and login with your account and the link between Azure and Azure DevOps
 
 Create an service connection with the Azure Container Registry in the same page, this will bind a conneciton from Azure DevOps to your container registry to build and save your images:
 
-![Image Git Subscription](./media/serviceconnection_acr.jpg)
+![Image Git Subscription](./media/serviceconnection_acr.JPG)
 
 Go to Pipelines and create a new pipeline:
-![Image Git Subscription](./media/new_pipeline.jpg)
+![Image Git Subscription](./media/new_pipeline.JPG)
 
 Choose "Azure Repos Git" and then select your repository that you have pushed to Azure DevOps Repo. 
 
 It will automatically select the **azure-pipelines.yml** file that is part of the repository. It contains a Yaml file with the configuration of a build.
 
-![Image Git Subscription](./media/pipeline_1.jpg)
+![Image Git Subscription](./media/pipeline_1.JPG)
 
 Run the pipeline and see the steps in the build, it will fail since we are not done with the configuration.
 
@@ -535,7 +535,7 @@ steps:
 ```
 Watch the repository in the Azure Container Registry.
 
-![Image Git Subscription](./media/acr.jpg)
+![Image Git Subscription](./media/acr.JPG)
 
 The azure-vote-front is the service you just built.
 
