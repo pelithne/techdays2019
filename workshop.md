@@ -504,13 +504,13 @@ To make a build we need to follow the same steps you have done manually:
 1. Go to your new Pipeline called "Test"
 2. Now edit the pipeline and type "docker" in the search bar. Fill in the details and press ok.
 
-![Image Git Subscription](./media/docker_pipeline.jpg)
+![Image Git Subscription](./media/docker_pipeline.JPG)
 
-![Image Git Subscription](./media/docker_pipeline2.jpg)
+![Image Git Subscription](./media/docker_pipeline2.JPG)
 
-![Image Git Subscription](./media/docker_pipeline3.jpg)
+![Image Git Subscription](./media/docker_pipeline3.JPG)
 
-![Image Git Subscription](./media/docker_pipeline4.jpg)
+![Image Git Subscription](./media/docker_pipeline4.JPG)
 
 
 The build definition that is both building and pushing to the Azure Container Registry:
