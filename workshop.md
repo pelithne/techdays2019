@@ -541,19 +541,115 @@ The azure-vote-front is the service you just built.
 
 Now we are going to deploy the image into the AKS cluster.
 
+
+Add another step in the build definition by selecting "Kubernetes" in the right pane:
+
+The final build definition:
+
+
+![Image Git Subscription](./media/deploy_aks1.JPG)
+
+```console
+trigger:
+- master
+
+pool:
+  vmImage: 'Ubuntu-16.04'
+
+steps:
+- task: Docker@2
+  inputs:
+    containerRegistry: 'Azure Container Registry'
+    repository: techdays2019/azure-vote-front
+    command: 'buildAndPush'
+    Dockerfile: '**/Dockerfile'
+    tags: $(Build.BuildId)
+
+
+- task: Kubernetes@1
+  inputs:
+    connectionType: 'Azure Resource Manager'
+    azureSubscriptionEndpoint: 'Arash Internal Consumption(e9aac0f0-83bd-43cf-ab35-c8e3eccc8932)'
+    azureResourceGroup: 'AKS-CI-CD'
+    kubernetesCluster: 'arraaks'
+    command: 'apply'
+    useConfigurationFile: true
+    configuration: 'azure-vote-all-in-one-redis.yaml'
+    secretType: 'dockerRegistry'
+    containerRegistryType: 'Azure Container Registry'
+```
+
+Save the build definition.
+
 Go to the yaml file that contains the definition of your service: **azure-vote-all-in-one-redis.yaml**
 
 Change:
 
-```
+```console
     image: microsoft/azure-vote-front:v1
-    
+
     ->>
     image: **<NAME OF YOUR AZURE CONTAINER REGISTRY>**.azurecr.io/techdays2019/azure-vote-front:**<BUILD ID>**
     
 ```
 
+Example:
 
+```console
+
+kind: Deployment
+metadata:
+  name: azure-vote-front
+spec:
+  replicas: 1
+  strategy:
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+  minReadySeconds: 5 
+  template:
+    metadata:
+      labels:
+        app: azure-vote-front
+    spec:
+      containers:
+      - name: azure-vote-front
+        image: arraacrcicd.azurecr.io/techdays2019/azure-vote-front:1036```
+```
+
+Whatch the build automatically triggered in Azure DevOps. 
+
+If you get errors, you might need to set the permission for the AKS cluster to pull images from AKS:
+
+```console
+
+az aks update -n <name of AKS cluster> -g <resource group of AKS> --attach-acr <name of Azure Container Registry>
+
+```
+
+To use the AKS dashboard, enable permission for the cluster-admin:
+
+```console
+
+kubectl create clusterrolebinding kubernetes-dashboard -n kube-system --clusterrole=cluster-admin --serviceaccount=kube-system:kubernetes-dashboard
+
+```
+
+Fire up the Kubernetes dashboard:
+
+```console
+
+az aks browse --resource-group <resource group of AKS> --name <name of AKS cluster>
+
+```
+
+Click on the IP-address and port that is exposed from the cluster:
+
+![Image Git Subscription](./media/aks_dashboard.JPG)
+
+You can now see the application deployed in AKS :)
+
+![Image Git Subscription](./media/aks_dashboard2.JPG)
 
 
 ## Scale applications in Azure Kubernetes Service (AKS)
