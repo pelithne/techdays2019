@@ -366,7 +366,7 @@ You can create a free Azure DevOps account at: <https://azure.microsoft.com/en-u
 
 You should now have project like this:
 
-![Image of Azure DevOps](./media/devopsproject.jpg)
+![Image of Azure DevOps](./media/devopsproject.JPG)
 
 The left hand side shows you:
 
@@ -401,7 +401,7 @@ Click on "+New Key" and fill in the public RSA key you got from above.
 
 Click on the Initialize button in the Azure Repos:
 
-![Image Git Credentials](./media/git_init.jpg)
+![Image Git Credentials](./media/git_init.JPG)
 
 Then clone the repository to your computer and go down in the directory of your repository. Create a file and commit and push it to Azure DevOps Repos.
 
