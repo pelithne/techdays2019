@@ -778,7 +778,7 @@ spec:
 
 Once you have committed the file, open Azure DevOps and watch the automatic build been triggered.
 
-![Image Git Subscription](./media/devops_cd.JPG)
+![Image Git Subscription](./media/devops_cd.jpg)
 
 Once the build is finished you can now run kubectle and watch the number of pods, you should now have 4 "azure-vote-front-*" pods.
 
