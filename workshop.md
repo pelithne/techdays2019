@@ -690,10 +690,6 @@ Click on the IP-address and port that is exposed from the cluster:
 
 ![Image Git Subscription](./media/aks_dashboard.JPG)
 
-You can now see the application deployed in AKS :)
-
-![Image Git Subscription](./media/aks_dashboard2.JPG)
-
 To see the change in the application we need the public endpoint of the application. Run the kubectl command to get the service endpoint:
 
 ```console
